@@ -21,8 +21,8 @@ final class SecondViewController: UIViewController {
 	
 	private func observeOutput() {
 		remoteDataSource.sampleData
-			.sink { [localDatabase] value in // this is where self is captured strongly
-				localDatabase.save(result: value) { [weak self] in // because we pass self to the inner closure
+			.sink { [unowned self] value in // now there's no retain cycle
+				self.localDatabase.save(result: value) { [weak self] in
 					self?.activityIndicator.stopAnimating()
 					self?.showAlert()
 				}
